@@ -1,0 +1,7 @@
+{
+  "name": "lm-vite",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}
