@@ -9,9 +9,7 @@ node_modules
 /.cache
 /public/build
 /build
-/.github
 /android
-.github
 .idea
 /.idea
 /ios
