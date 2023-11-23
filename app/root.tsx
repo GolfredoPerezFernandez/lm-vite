@@ -8,13 +8,12 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import styles from "";
-import nprogressCss from "";
 
 import type { DataFunctionArgs } from "@remix-run/node";
 import { useRouteProgressBar } from "~/util/useRouteProgressBar";
 import "./tailwind.css"
 import "./nprogress.css"
+import Navbar from "./components/Navbar";
 
 
 // export const meta: V2_MetaFunction = () => [
@@ -53,7 +52,9 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-[100dvh] relative">
+      <body className="h-[100dvh] relative bg-slate-300/20">
+      
+        <Navbar/>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
