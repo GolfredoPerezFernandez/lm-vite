@@ -1,14 +1,7 @@
-import {
-     useLoaderData,
-  } from "@remix-run/react";
-  import {
-    VerticalTimeline,
-    VerticalTimelineElement,
-  } from "react-vertical-timeline-component";
-  import CTA from '~/components/CTA';
-  import "react-vertical-timeline-component/style.min.css";
 
-  import { experiences, skills } from "../constants/index";
+  import CTA from '~/components/CTA';
+
+  import {  skills } from "../constants/index";
   
   import type { DataFunctionArgs } from "@remix-run/node";
 
@@ -67,7 +60,7 @@ import {
             </div>
     
             <div className='mt-12 flex'>
-              <VerticalTimeline>
+              {/* <VerticalTimeline>
                 {experiences.map((experience, index) => (
                   <VerticalTimelineElement
                     key={experience.company_name}
@@ -113,7 +106,7 @@ import {
                     </ul>
                   </VerticalTimelineElement>
                 ))}
-              </VerticalTimeline>
+              </VerticalTimeline> */}
             </div>
           </div>
     
