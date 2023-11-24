@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'lm-vite',
   webDir: 'build',
   server: {
-    url: "https://lm-vite-sparkling-meadow-807.fly.dev/",
+    url: "https://lm-vite.fly.dev/",
     cleartext: true  }
 };
 
