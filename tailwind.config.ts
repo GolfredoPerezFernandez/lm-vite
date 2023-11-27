@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss'
 export default {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
+    
   ],
   theme: {
     extend: {
@@ -10,7 +11,7 @@ export default {
         extend: {
           colors: {
             gray: {
-              200: "#D5DAE1"
+              200: "#FFFFFF"
             },
             black: {
               DEFAULT: "#000",

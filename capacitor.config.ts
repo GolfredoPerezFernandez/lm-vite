@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'lm-vite',
   webDir: 'build',
   server: {
-    url: "https://lm-vite.fly.dev/",
+    url: "https://lightmatter.fly.dev/",
     cleartext: true  }
 };
 

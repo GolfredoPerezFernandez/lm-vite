@@ -1,16 +1,16 @@
 import {
+  Link,
      useLoaderData,
   } from "@remix-run/react";
   
   import CTA from '~/components/CTA';
-  import "react-vertical-timeline-component/style.min.css";
-
   import { experiences, skills } from "../constants/index";
   
   import type { DataFunctionArgs } from "@remix-run/node";
-import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
+import 'react-vertical-timeline-component/style.min.css';
+import { projects } from "../constants";
+import { arrow } from "../assets/icons";
 
-  
   export async function loader({ request, params }: DataFunctionArgs) {
    
     return null;
@@ -19,8 +19,8 @@ import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeli
   export default function About() {
   
     return (
-        <section className='max-container'>
-          <h1 className='head-text'>
+        <section className='pb-60 overflow-y-auto max-container '>
+          <h1 className='head-text' >
             Hello, I'm{" "}
             <span className='blue-gradient_text font-semibold drop-shadow'>
               {" "}
@@ -64,60 +64,67 @@ import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeli
               </p>
             </div>
     
-            <div className='mt-12 flex'>
-              <VerticalTimeline>
-                {experiences.map((experience, index) => (
-                  <VerticalTimelineElement
-                    key={experience.company_name}
-                    date={experience.date}
-                    iconStyle={{ background: experience.iconBg }}
-                    icon={
-                      <div className='flex justify-center items-center w-full h-full'>
-                        <img
-                          src={experience.icon}
-                          alt={experience.company_name}
-                          className='w-[60%] h-[60%] object-contain'
-                        />
-                      </div>
-                    }
-                    contentStyle={{
-                      borderBottom: "8px",
-                      borderStyle: "solid",
-                      borderBottomColor: experience.iconBg,
-                      boxShadow: "none",
-                    }}
-                  >
-                    <div>
-                      <h3 className='text-black text-xl font-poppins font-semibold'>
-                        {experience.title}
-                      </h3>
-                      <p
-                        className='text-black-500 font-medium text-base'
-                        style={{ margin: 0 }}
-                      >
-                        {experience.company_name}
-                      </p>
-                    </div>
-    
-                    <ul className='my-5 list-disc ml-5 space-y-2'>
-                      {experience.points.map((point, index) => (
-                        <li
-                          key={`experience-point-${index}`}
-                          className='text-black-500/50 font-normal pl-1 text-sm'
-                        >
-                          {point}
-                        </li>
-                      ))}
-                    </ul>
-                  </VerticalTimelineElement>
-                ))}
-              </VerticalTimeline>
+            <h1 className='head-text'>
+        My{" "}
+        <span className='blue-gradient_text drop-shadow font-semibold'>
+          Projects
+        </span>
+      </h1>
+
+      <p className='text-slate-500 mt-2 leading-relaxed'>
+        I've embarked on numerous projects throughout the years, but these are
+        the ones I hold closest to my heart. Many of them are open-source, so if
+        you come across something that piques your interest, feel free to
+        explore the codebase and contribute your ideas for further enhancements.
+        Your collaboration is highly valued!
+      </p>
+
+      <div className='flex flex-wrap my-20 gap-16'>
+        {projects.map((project) => (
+          <div className='lg:w-[400px] w-full' key={project.name}>
+            <div className='block-container w-12 h-12'>
+              <div className={`btn-back rounded-xl ${project.theme}`} />
+              <div className='btn-front rounded-xl flex justify-center items-center'>
+                <img
+                  src={project.iconUrl}
+                  alt='threads'
+                  className='w-1/2 h-1/2 object-contain'
+                />
+              </div>
+            </div>
+
+            <div className='mt-5 flex flex-col'>
+              <h4 className='text-2xl font-poppins font-semibold'>
+                {project.name}
+              </h4>
+              <p className='mt-2 text-slate-500'>{project.description}</p>
+              <div className='mt-5 flex items-center gap-2 font-poppins'>
+                <Link
+                  to={project.link}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='font-semibold text-blue-600'
+                >
+                  Live Link
+                </Link>
+                <img
+                  src={arrow}
+                  alt='arrow'
+                  className='w-4 h-4 object-contain'
+                />
+              </div>
             </div>
           </div>
+        ))}
+      </div>
+
+      <hr className='border-slate-200' />
+
+      <CTA />
+            </div>
     
-          <hr className='border-slate-200' />
-    
-          <CTA />
+          <hr className='border-slate-300' />
+        
         </section>
     );
   }

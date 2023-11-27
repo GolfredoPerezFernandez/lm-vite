@@ -24,6 +24,9 @@ RUN apt-get update -qq && \
 COPY --link package.json .
 RUN npm install --production=false
 
+# Generate Prisma Client
+COPY --link prisma .
+RUN npx prisma generate
 
 # Copy application code
 COPY --link . .
@@ -31,6 +34,8 @@ COPY --link . .
 # Build application
 RUN npm run build
 
+# Remove development dependencies
+RUN npm prune --production
 
 
 # Final stage for app image
@@ -39,6 +44,8 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 
+# Entrypoint prepares the database.
+ENTRYPOINT ["/app/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 CMD [ "npm", "run", "start" ]
