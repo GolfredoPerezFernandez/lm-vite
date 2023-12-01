@@ -4,7 +4,7 @@ import {  Prisma } from "@prisma/client";
 export const createModel = async (
   title: string,
   message: string,
-  userId: string,
+  userId: number,
 ) => {
   await prisma.model.create({
     data: {
@@ -20,7 +20,7 @@ export const createModel = async (
 };
 
 export const getFilteredModel = async (
-  userId: string,
+  userId: number,
   sortFilter: Prisma.ModelOrderByWithRelationInput,
   whereFilter: Prisma.ModelWhereInput
 ) => {

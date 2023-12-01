@@ -9,9 +9,9 @@ import { SelectBox } from "~/components/select-box";
 import { validateName } from "~/utils/validators.server";
 import type { ActionFunction } from "@remix-run/node"
 import { redirect, json } from "@remix-run/node"
-import { getUser, requireUserId, logout } from "~/utils/auth.server";
+import { getUser, requireUserId, logout } from "~/lib/auth.server";
 import { ImageUploader } from '~/components/image-uploader'
-import { updateUser, deleteUser } from "~/utils/user.server";
+import { updateUser, deleteUser } from "~/lib/user.server";
 
 
 export const action: ActionFunction = async ({ request }) => {

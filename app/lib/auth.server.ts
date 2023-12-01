@@ -22,6 +22,7 @@ const storage = createCookieSessionStorage({
 });
 
 export async function register(user: RegisterForm) {
+  
   const exists = await prisma.user.count({ where: { email: user.email } });
   if (exists) {
     return json(
@@ -55,7 +56,7 @@ export async function login({ email, password }: LoginForm) {
   return createUserSession(user.id, "/models");
 }
 
-export async function createUserSession(userId: string, redirectTo: string) {
+export async function createUserSession(userId: number, redirectTo: string) {
   const session = await storage.getSession();
   session.set("userId", userId);
   return redirect(redirectTo, {
@@ -71,7 +72,7 @@ export async function requireUserId(
 ) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") {
+  if (!userId || typeof userId !== "number") {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
     throw redirect(`/login?${searchParams}`);
   }
@@ -85,7 +86,7 @@ function getUserSession(request: Request) {
 async function getUserId(request: Request) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") return null;
+  if (!userId || typeof userId !== "number") return null;
   return userId;
 }
 

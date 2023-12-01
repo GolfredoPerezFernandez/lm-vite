@@ -1,43 +1,65 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
-  password  String
+model SpectralFormat {
+  id      Int   @id @default(autoincrement())
+  modelId Int
+  dataX   Int
+  dataY   Int
+  model   Model @relation("SpectralDataFormat", fields: [modelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
 
-  authoredModel Model[]  @relation("AuthoredModel")
-  profile       Profile
+model SpectralRealDataFormat {
+  id      Int   @id @default(autoincrement())
+  modelId Int
+  dataX   Int
+  dataY   Int
+  model   Model @relation("SpectralRealDataFormat", fields: [modelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model SpectralImaginaryDataFormat {
+  id      Int   @id @default(autoincrement())
+  modelId Int
+  dataX   Int
+  dataY   Int
+  model   Model @relation("SpectralImaginaryDataFormat", fields: [modelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Model {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  message     String
-  createdAt   DateTime   @default(now())
-  author      User       @relation(references: [id], fields: [authorId], onDelete: Cascade, "AuthoredModel")
-  authorId    String     @db.ObjectId
-  imaginaryPartX Float[]   
-  imaginaryPartY Float[]  
-  dfImaginaryPartX Float[] 
-  dfImaginaryPartY Float[] 
-  dfRealPartX Float[]   
-  dfRealPartY Float[]  
+  id            Int                           @id @default(autoincrement())
+  title         String
+  message       String
+  createdAt     DateTime                      @default(now())
+  authorId      Int
+  author        User                          @relation("Author", fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  spectralData  SpectralFormat[]              @relation("SpectralDataFormat")
+  imaginaryPart SpectralImaginaryDataFormat[] @relation("SpectralImaginaryDataFormat")
+  realPart      SpectralRealDataFormat[]      @relation("SpectralRealDataFormat")
 }
 
-type Profile {
+model User {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  email          String   @unique
+  password       String
+  profileId      Int
+  authoredModels Model[]  @relation("Author")
+  profile        Profile  @relation("Profile", fields: [profileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([profileId], map: "IFK_UserProfileId")
+}
+
+model Profile {
+  id             Int     @id @default(autoincrement())
   firstName      String
   lastName       String
   profilePicture String?
+  User           User[]  @relation("Profile")
 }

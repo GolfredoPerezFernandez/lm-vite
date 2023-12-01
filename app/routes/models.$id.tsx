@@ -1,33 +1,71 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import type { DataFunctionArgs } from "@remix-run/node";
+import { defer, type DataFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Await, useLoaderData, useNavigate } from "@remix-run/react";
 import { deferIf } from "defer-if";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Suspense, useEffect, useRef } from "react";
 import { isNative, slowDown } from "~/utils/async";
-import { prisma } from "~/utils/prisma.server";
+import { prisma } from "~/lib/prisma.server";
 
+import { Chart } from "react-google-charts";
+import { nameCache } from "~/lib/cache.server";
 
+export const meta: MetaFunction = () => {
+  return [{ title: "Model" }];
+};
 export async function loader({ request, params }: DataFunctionArgs) {
+
+  
   let model = slowDown(async () => {
     const result = await prisma.model.findFirst({
       where: {
-        id: String(params.id),
+        id: Number(params.id),
       }
     });
-    if (!result) {
-      throw "Not found";
-    }
+    
     return result;
-  });
+  
+  })
+  if (!isNative(request)) {
+    await model;
+
+  }
 
 
-  return deferIf({ model }, isNative(request));
+  if (!model) {
+    throw new Response(null, {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }    
+
+  const title = nameCache.get(Number(params.id)) ?? "Model";
+
+  return defer({ model,title });
 }
 export default function ModelDetails() {
-  const { model } = useLoaderData<typeof loader>();
+  const { model,title } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
+   const data = [
+    ["Year", "Sales"],
+    ["2004", 1000],
+    ["2005", 1170],
+    ["2006", 660],
+    ["2007", 1030],
+  ];
+  
+   const optionsReal = {
+    title: "Real Part",
+    curveType: "function",
+    legend: { position: "bottom" },
+  };
+  
+  const optionsImaginary = {
+    title: "Imaginary Part",
+    curveType: "function",
+    legend: { position: "bottom" },
+  };
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { scrollY } = useScroll({ container: containerRef });
@@ -77,6 +115,7 @@ export default function ModelDetails() {
           >
             <ChevronLeftIcon className="h-5" />
             <span>Models</span>
+            
           </button>
           <motion.h1
             className="font-medium shrink-0 overflow-hidden text-ellipsis whitespace-nowrap min-w-0 py-3 flex-1 flex justify-center "
@@ -84,19 +123,19 @@ export default function ModelDetails() {
               opacity: useTransform(scrollY, range, [0, 0, 1]),
             }}
           >
-            {"My Models 1"}
+            {title}
           </motion.h1>
         </div>
         <div></div>
       </motion.nav>
 
       <div className="overflow-y-auto flex-1 pb-16" ref={containerRef}>
-        <motion.h1
+      <motion.h1
           initial={{ opacity: 0, x: 5 }}
           animate={{ opacity: 1, x: 0 }}
           className="px-2 text-3xl font-semibold block text-ellipsis overflow-hidden whitespace-nowrap min-w-0"
         >
-        {"My Models 2"}
+          {title}
         </motion.h1>
         <Suspense>
           <Await resolve={model}>
@@ -104,16 +143,42 @@ export default function ModelDetails() {
               <motion.div
                 initial={{ opacity: 0, x: 5 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="px-3 py-3"
+                className="px-3 py-3   w-full h-full"
               >
-                      <div className="overflow-hidden text-ellipsis ">
-                        <div className="whitespace-nowrap text-ellipsis overflow-hidden min-w-0">
+                 <div className="whitespace-nowrap text-ellipsis overflow-hidden min-w-0">
                           {model.title}
                         </div>
-                        <div className="text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden min-w-0">
+                      <div className=" overflow-hidden text-ellipsis justify-center flex items-center ">
+                       
+                        <Chart
+      chartType="LineChart"
+      width="100%"
+      height="100%"
+      data={data}
+      style={{marginRight:-10}}
+      options={optionsReal}
+    />
+                    
+                      
+                        
+                      </div>
+                      <div className=" overflow-hidden text-ellipsis justify-center flex items-center ">
+                       
+                       <Chart
+     chartType="LineChart"
+     width="100%"
+     height="100%"
+     data={data}
+     style={{marginRight:-10}}
+     options={optionsImaginary}
+   />
+                   
+                     
+                       
+                     </div>
+                      <div className="text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden min-w-0">
                           {model.message}
                         </div>
-                      </div>
               </motion.div>
             )}
           </Await>

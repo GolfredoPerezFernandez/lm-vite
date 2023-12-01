@@ -5,13 +5,13 @@
  import {
     requireUserId,
     getUser
-  } from '~/utils/auth.server'
- import { json, type DataFunctionArgs, type LoaderFunction, redirect } from "@remix-run/node";
+  } from '~/lib/auth.server'
+ import { json, type DataFunctionArgs, type LoaderFunction, redirect, MetaFunction } from "@remix-run/node";
 import 'react-vertical-timeline-component/style.min.css';
 import { SearchBar } from "~/components/search-bar";
-import { Model as IModel, Profile, Prisma } from '@prisma/client'
-import { getOtherUsers } from '~/utils/user.server'
-import { getFilteredModel, getRecentModel } from '~/utils/model.server'
+import { Model as IModel, Profile, Prisma, Model } from '@prisma/client'
+import { getOtherUsers } from '~/lib/user.server'
+import { getFilteredModel, getRecentModel } from '~/lib/model.server'
 import { RecentBar } from '~/components/recent-bar';
 import { ChevronRightIcon, PlusIcon } from "@heroicons/react/24/outline";
 
@@ -27,20 +27,23 @@ import clsx from "clsx";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Suspense, useEffect, useRef } from "react";
 import { isNative, slowDown } from "~/utils/async";
-import { deferIf } from "defer-if";
-import type { Model } from "@prisma/client";
+import { nameCache } from '~/lib/cache.server';
 
-interface ModelWithAuthor extends IModel {
-    author: {
-        profile: Profile
+function hydrateNames(models: Model[]) {
+  for (const model of models) {
+    if (model.title) {
+      nameCache.set(model.id, model.title);
     }
+  }
 }
-
+export const meta: MetaFunction = () => {
+  return [{ title: "Models" }];
+};
 export const loader: LoaderFunction = async ({ request }) => {
     const userId = await requireUserId(request);
   
   
-    if (typeof userId !== 'string') {
+    if (typeof userId !== 'number') {
       return redirect('/')
     } 
     // Pull out our search & sort criteria
@@ -72,15 +75,14 @@ export const loader: LoaderFunction = async ({ request }) => {
             OR: [
                 {
                     message: {
-                        mode: 'insensitive',
                         contains: filter
                     }
                 },
                 {
                     author: {
                         OR: [
-                            { profile: { is: { firstName: { mode: 'insensitive', contains: filter } } } },
-                            { profile: { is: { lastName: { mode: 'insensitive', contains: filter } } } },
+                            { profile: { is: { firstName: {  contains: filter } } } },
+                            { profile: { is: { lastName: {  contains: filter } } } },
                         ]
                     }
                 },
@@ -88,7 +90,9 @@ export const loader: LoaderFunction = async ({ request }) => {
         }
     }
     const models = slowDown(async ()=>await getFilteredModel(userId, sortOptions, textFilter))
+    models.then(hydrateNames);
   
+
     if (!isNative(request)) {
       await models;
     }
@@ -187,7 +191,7 @@ export const loader: LoaderFunction = async ({ request }) => {
             Models
           </motion.h1>
 
-          <Suspense>
+          <Suspense fallback={null}>
             <Await resolve={models}>
               {(models) => (
                 <motion.ul

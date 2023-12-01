@@ -10,15 +10,17 @@ export const createUser = async (user: RegisterForm) => {
       email: user.email,
       password: passwordHash,
       profile: {
+        create: {
         firstName: user.firstName,
         lastName: user.lastName,
+      },
       },
     },
   });
   return { id: newUser.id, email: user.email };
 };
 
-export const getOtherUsers = async (userId: string) => {
+export const getOtherUsers = async (userId: number) => {
   return await prisma.user.findMany({
     where: {
       id: { not: userId },
@@ -31,7 +33,7 @@ export const getOtherUsers = async (userId: string) => {
   });
 };
 
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: number) => {
   return await prisma.user.findUnique({
     where: {
       id: userId,
@@ -39,7 +41,7 @@ export const getUserById = async (userId: string) => {
   });
 };
 
-export const updateUser = async (userId: string, profile: Partial<Profile>) => {
+export const updateUser = async (userId: number, profile: Partial<Profile>) => {
   await prisma.user.update({
     where: {
       id: userId,
@@ -52,6 +54,6 @@ export const updateUser = async (userId: string, profile: Partial<Profile>) => {
   });
 };
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (id: number) => {
   await prisma.user.delete({ where: { id } });
 };

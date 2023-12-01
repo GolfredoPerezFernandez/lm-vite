@@ -1,5 +1,6 @@
 import { json, type LinksFunction } from "@remix-run/node";
 import {
+  isRouteErrorResponse,
   Link,
   Links,
   LiveReload,
@@ -9,13 +10,14 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
 } from "@remix-run/react";
 
 import type { DataFunctionArgs } from "@remix-run/node";
 import { useRouteProgressBar } from "~/utils/useRouteProgressBar";
 import "./tailwind.css"
 import "./nprogress.css"
-import { getUser } from "./utils/auth.server";
+import { getUser } from "./lib/auth.server";
 import { logo } from "./assets/images";
 import {  useState } from "react";
 import Layout from "./components/Layout";
@@ -69,5 +71,28 @@ export default function Models() {
     
     </body>
   </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>
+          {isRouteErrorResponse(error)
+            ? `${error.status} ${error.statusText}`
+            : error instanceof Error
+            ? error.message
+            : "Unknown Error"}
+        </h1>
+        <Scripts />
+      </body>
+    </html>
   );
 }

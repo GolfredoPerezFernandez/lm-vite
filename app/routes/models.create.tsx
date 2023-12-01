@@ -1,6 +1,6 @@
-import { getUserById } from "~/utils/user.server"
+import { getUserById } from "~/lib/user.server"
 import { Modal } from '~/components/modal';
-import { getUser } from '~/utils/auth.server'
+import { getUser } from '~/lib/auth.server'
 
 import { useLoaderData, useActionData, useNavigate } from "@remix-run/react"
 import { UserCircle } from "~/components/user-circle";
@@ -10,8 +10,8 @@ import { Model } from "~/components/model";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
 import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node"
-import { createModel } from "~/utils/model.server";
-import { requireUserId } from "~/utils/auth.server";
+import { createModel } from "~/lib/model.server";
+import { requireUserId } from "~/lib/auth.server";
 import { ModelCreate } from "~/components/modelCreate";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -49,7 +49,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function Create() {
-    const actionData = useActionData()
+    const actionData = useActionData<typeof action>()
     const [formError,setFormError] = useState(actionData?.error || '')
     const [formData, setFormData] = useState({
         message: '',
@@ -81,7 +81,7 @@ export default function Create() {
     }, [])
 
 
-    const {  user } = useLoaderData()
+    const {  user } = useLoaderData<typeof loader>()
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -183,7 +183,7 @@ export default function Create() {
                     /> 
                      <p className="text-blue-600 flex-col font-semibold mb-0">Upload your spectral data:</p>
             <div className="flex flex-col  ">
-                <ModelCreate profile={user.profile} model={formData} />
+                <ModelCreate profile={user?.profile} model={formData} />
                 
             </div>
             <button type="submit" className="rounded-xl w-3/5	 align-bottom bg-yellow-300 font-semibold text-blue-600  h-12 transition duration-300 ease-in-out hover:bg-yellow-400 hover:-translate-y-1">

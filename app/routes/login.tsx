@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { FormField } from '~/components/form-field'
 import { validateEmail, validateName, validatePassword } from '~/utils/validators.server'
 import { ActionFunction, json, LoaderFunction, redirect } from '@remix-run/node'
-import { login, register, getUser } from '~/utils/auth.server'
+import { login, register, getUser } from '~/lib/auth.server'
 import { useActionData } from '@remix-run/react'
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -126,7 +126,7 @@ export default function Login() {
                 <p className="font-semibold text-slate-300">{
                     action === 'login' ? 'Log In To Start Modeling!' : 'Sign Up To Get Started!'
                 }</p>
-                <form method="POST" className="rounded-2xl bg-gray-200 p-6 w-96">
+                <form method="POST" className="rounded-2xl bg-gray-200 p-6 w-11/12">
                     <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">
                         {formError}
                     </div>

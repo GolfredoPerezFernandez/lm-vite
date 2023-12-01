@@ -1,3 +1,7 @@
+
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,13 +102,6 @@
   }
 }
 
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --blue-rgb: 237 245 255;
   --green-rgb: 125 161 35;
@@ -124,11 +121,11 @@ body:has(.card[data-color="green"]:hover) {
 
 @layer utilities {
   .max-container {
-    @apply max-w-5xl mx-auto sm:p-16 pb-12 !pt-[64px] px-8 min-h-[calc(100vh-80px)];
+    @apply max-w-5xl mx-auto sm:p-16 pb-12 !pt-[14px] px-8 min-h-[calc(100vh-80px)];
   }
 
   .head-text {
-    @apply sm:text-5xl text-3xl font-semibold sm:leading-snug ;
+    @apply sm:text-5xl text-center text-2xl font-semibold sm:leading-snug ;
   }
 
   .subhead-text {

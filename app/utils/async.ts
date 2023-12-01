@@ -13,9 +13,8 @@ export function slowDown<T extends (...args: any[]) => Promise<any>>(
 }
 
 export function isNative(request: Request) {
-  return false;
-  // const userAgent = request.headers.get("User-Agent");
-  // return !!userAgent?.match(
-  //   /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
-  // );
+  const userAgent = request.headers.get("User-Agent");
+  return !!userAgent?.match(
+    /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+   );
 }
