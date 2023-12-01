@@ -9,7 +9,7 @@ import { useActionData } from '@remix-run/react'
 
 export const meta: MetaFunction = () => [
     {
-       name: "Welcome",
+       name: "Login",
       content: "initial-scale=1, viewport-fit=cover",
       "viewport-fit": "cover",
      },
