@@ -2,10 +2,18 @@
 import { useState, useEffect, useRef } from 'react'
 import { FormField } from '~/components/form-field'
 import { validateEmail, validateName, validatePassword } from '~/utils/validators.server'
-import { ActionFunction, json, LoaderFunction, redirect } from '@remix-run/node'
+import { ActionFunction, json, LoaderFunction, MetaFunction, redirect } from '@remix-run/node'
 import { login, register, getUser } from '~/lib/auth.server'
 import { useActionData } from '@remix-run/react'
 
+
+export const meta: MetaFunction = () => [
+    {
+       name: "Welcome",
+      content: "initial-scale=1, viewport-fit=cover",
+      "viewport-fit": "cover",
+     },
+   ];
 export const loader: LoaderFunction = async ({ request }) => {
     // If there's already a user in the session, redirect to the home page
     return await getUser(request) ? redirect('/') : null

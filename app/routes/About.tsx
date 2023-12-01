@@ -6,11 +6,19 @@ import {
   import CTA from '~/components/CTA';
   import { experiences, skills } from "../constants/index";
   
-  import type { DataFunctionArgs } from "@remix-run/node";
+  import type { DataFunctionArgs, MetaFunction } from "@remix-run/node";
 import 'react-vertical-timeline-component/style.min.css';
 import { projects } from "../constants";
 import { arrow } from "../assets/icons";
 
+
+export const meta: MetaFunction = () => [
+  {
+     name: "About",
+    content: "initial-scale=1, viewport-fit=cover",
+    "viewport-fit": "cover",
+   },
+ ];
   export async function loader({ request, params }: DataFunctionArgs) {
    
     return null;
