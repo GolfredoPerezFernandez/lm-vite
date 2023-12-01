@@ -28,8 +28,22 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Suspense, useEffect, useRef } from "react";
 import { isNative, slowDown } from "~/utils/async";
 import { nameCache } from '~/lib/cache.server';
-
+/* 
 function hydrateNames(models: Model[]) {
+  for (const model of models) {
+    if (model.title) {
+      nameCache.set(model.id, model.id);
+    }
+  }
+} */
+
+async function hydrateNames(models: {
+  id: number;
+  title?: string; // Adjust these properties based on the actual type
+  message?: string;
+  createdAt?: Date;
+  authorId?: number;
+}[]): Promise<void> {
   for (const model of models) {
     if (model.title) {
       nameCache.set(model.id, model.id);
