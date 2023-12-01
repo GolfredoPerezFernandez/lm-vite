@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Modal } from "~/components/modal";
 
 import { useLoaderData, useActionData } from "@remix-run/react"
@@ -14,6 +14,14 @@ import { ImageUploader } from '~/components/image-uploader'
 import { updateUser, deleteUser } from "~/lib/user.server";
 
 
+
+export const meta: MetaFunction = () => [
+    {
+       name: "Profile",
+      content: "initial-scale=1, viewport-fit=cover",
+      "viewport-fit": "cover",
+     },
+   ];
 export const action: ActionFunction = async ({ request }) => {
     const userId = await requireUserId(request);
     const form = await request.formData();
