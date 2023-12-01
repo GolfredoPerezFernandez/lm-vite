@@ -9,12 +9,15 @@ import { SelectBox } from '~/components/select-box'
 import { Model } from "~/components/model";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
-import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node"
+import { ActionFunction, json, LoaderFunction, MetaFunction, redirect } from "@remix-run/node"
 import { createModel } from "~/lib/model.server";
 import { requireUserId } from "~/lib/auth.server";
 import { ModelCreate } from "~/components/modelCreate";
 import { motion, useScroll, useTransform } from "framer-motion";
 
+export const meta: MetaFunction = () => {
+  return [{ title: "Create" }];
+};
 export const loader: LoaderFunction = async ({ request }) => {
     const user = await getUser(request)
     return json({ user })
