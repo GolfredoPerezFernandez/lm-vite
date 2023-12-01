@@ -13,7 +13,7 @@ import {
   useRouteError,
 } from "@remix-run/react";
 
-import type { DataFunctionArgs } from "@remix-run/node";
+import type { DataFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useRouteProgressBar } from "~/utils/useRouteProgressBar";
 import "./tailwind.css"
 import "./nprogress.css"
@@ -24,13 +24,13 @@ import Layout from "./components/Layout";
 
 
 
-// export const meta: V2_MetaFunction = () => [
-//   {
-//     name: "viewport",
-//     content: "initial-scale=1, viewport-fit=cover",
-//     "viewport-fit": "cover",
-//   },
-// ];
+ export const meta: MetaFunction = () => [
+  {
+     name: "Welcome",
+    content: "initial-scale=1, viewport-fit=cover",
+    "viewport-fit": "cover",
+   },
+ ];
 export async function loader({ request, params }: DataFunctionArgs) {
   const userAgent = request.headers.get("User-Agent");
   const isMobile = userAgent?.match(
