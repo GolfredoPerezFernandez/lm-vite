@@ -12,6 +12,7 @@
     "deploy": "flyctl deploy",
     "reset": "prisma db push --force-reset",
     "resetmigration": "prisma migrate reset",
+    "scale": "flyctl scale vm shared-cpu-2x",
 
     
     "ionic:build": "pnpm run build",

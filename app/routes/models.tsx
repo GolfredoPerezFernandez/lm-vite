@@ -32,7 +32,7 @@ import { nameCache } from '~/lib/cache.server';
 function hydrateNames(models: Model[]) {
   for (const model of models) {
     if (model.title) {
-      nameCache.set(model.id, model.title);
+      nameCache.set(model.id, model.id);
     }
   }
 }
