@@ -11,7 +11,7 @@ if (!sessionSecret) {
 
 const storage = createCookieSessionStorage({
   cookie: {
-    name: "kudos-session",
+    name: "lightmatter-session",
     secure: process.env.NODE_ENV === "production",
     secrets: [sessionSecret],
     sameSite: "lax",
@@ -64,6 +64,8 @@ export async function createUserSession(userId: number, redirectTo: string) {
       "Set-Cookie": await storage.commitSession(session),
     },
   });
+
+  
 }
 
 export async function requireUserId(
@@ -79,7 +81,7 @@ export async function requireUserId(
   return userId;
 }
 
-function getUserSession(request: Request) {
+export function getUserSession(request: Request) {
   return storage.getSession(request.headers.get("Cookie"));
 }
 

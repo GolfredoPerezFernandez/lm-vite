@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SpectralFormat {
+model SpectralDataFormat {
   id      Int   @id @default(autoincrement())
   modelId Int
   dataX   Int
@@ -38,9 +38,9 @@ model Model {
   createdAt     DateTime                      @default(now())
   authorId      Int
   author        User                          @relation("Author", fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  spectralData  SpectralFormat[]              @relation("SpectralDataFormat")
-  imaginaryPart SpectralImaginaryDataFormat[] @relation("SpectralImaginaryDataFormat")
-  realPart      SpectralRealDataFormat[]      @relation("SpectralRealDataFormat")
+  chartSpectralData  SpectralDataFormat[]              @relation("SpectralDataFormat")
+  chartSpectralDataImaginary SpectralImaginaryDataFormat[] @relation("SpectralImaginaryDataFormat")
+   chartSpectralDataReal  SpectralRealDataFormat[]      @relation("SpectralRealDataFormat")
 }
 
 model User {

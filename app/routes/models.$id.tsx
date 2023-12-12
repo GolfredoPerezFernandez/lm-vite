@@ -1,21 +1,42 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { defer, type DataFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Await, useLoaderData, useNavigate } from "@remix-run/react";
+import { defer, type DataFunctionArgs, MetaFunction, ActionFunction, json } from "@remix-run/node";
+import { Await, useActionData, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { deferIf } from "defer-if";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Suspense, useEffect, useRef } from "react";
 import { isNative, slowDown } from "~/utils/async";
 import { prisma } from "~/lib/prisma.server";
+import sdk from 'api';
 
 import { Chart } from "react-google-charts";
+
 import { nameCache } from "~/lib/cache.server";
+import { authDID, createTalk } from "~/lib/d-id.server";
+
 
 export const meta: MetaFunction = () => {
   return [{ title: "Model" }];
 };
-export async function loader({ request, params }: DataFunctionArgs) {
 
+const fetchPlus = (url, options = {}, retries) =>
+  fetch(url, options)
+    .then((res:any) => {
+      if (res.ok) {
+        return res.json()
+      }
+      if (retries > 0) {
+        return fetchPlus(url, options, retries - 1)
+      }
+      throw new Error(res.status)
+    })
+    .catch(error => console.error(error.message))
+
+export async function loader({ request, params }: DataFunctionArgs) {
   
+
+let did=await authDID()
+
+
   let model = slowDown(async () => {
     const result = await prisma.model.findFirst({
       where: {
@@ -40,13 +61,36 @@ export async function loader({ request, params }: DataFunctionArgs) {
   }    
 
   const title = nameCache.get(Number(params.id)) ?? "Model";
+let createtalk=await createTalk("Holaa COmo estas")
 
-  return defer({ model,title });
+  return defer({ model,title,did,createtalk});
 }
-export default function ModelDetails() {
-  const { model,title } = useLoaderData<typeof loader>();
-  const navigate = useNavigate();
 
+export default function ModelDetails() {
+
+  const { model,title,did,createtalk} = useLoaderData<typeof loader>();
+  console.log("dataStream "+JSON.stringify(did.dataStream))
+
+console.log("dataConnection "+JSON.stringify(did.dataConnection))
+console.log("datasdp "+JSON.stringify(did.dataStream.offer.sdp))
+console.log("datasession_id "+JSON.stringify(did.dataStream.session_id))
+console.log("dataid "+JSON.stringify(did.dataStream.id))
+console.log("dataIceCandidate "+JSON.stringify(did.dataStream.dataIceCandidate))
+console.log("talktalk "+JSON.stringify(createtalk))
+
+
+  const navigate = useNavigate();
+  
+     
+
+useEffect(()=>{
+  async function init() {
+
+}
+
+init()
+
+},[])
    const data = [
     ["Year", "Sales"],
     ["2004", 1000],
@@ -75,6 +119,10 @@ export default function ModelDetails() {
     "#FFFFFF",
     "#FFFFFF",
   ]);
+ async function talk(){
+
+    return
+  }
   useEffect(() => {
     return navBackgroundColor.onChange((color) => {
       // change meta theme color
@@ -183,6 +231,9 @@ export default function ModelDetails() {
             )}
           </Await>
         </Suspense>
+        <form method="POST" >
+        <button type="submit" name="_action" onClick={talk}>{"create talk"}</button>
+        </form>
       </div>
     </div>
   );

@@ -19,7 +19,6 @@ export const createUser = async (user: RegisterForm) => {
   });
   return { id: newUser.id, email: user.email };
 };
-
 export const getOtherUsers = async (userId: number) => {
   return await prisma.user.findMany({
     where: {

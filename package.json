@@ -13,12 +13,9 @@
     "reset": "prisma db push --force-reset",
     "resetmigration": "prisma migrate reset",
     "scale": "flyctl scale vm shared-cpu-2x",
-
-    
     "ionic:build": "pnpm run build",
-    "predev": " npx prisma db push &&prisma generate && prisma migrate deploy ", 
-        "prisma": "prisma",
-
+    "predev": " npx prisma db push &&prisma generate && prisma migrate deploy ",
+    "prisma": "prisma",
     "ionic:serve": "pnpm run start"
   },
   "dependencies": {
@@ -37,24 +34,25 @@
     "@react-three/drei": "^9.88.17",
     "@react-three/fiber": "^8.15.11",
     "@remix-run/node": "^2.3.0",
-    "@remix-run/react": "^2.3.0",
-    "@remix-run/serve": "^2.3.0",
+    "@remix-run/react": "latest",
+    "@remix-run/serve": "latest",
     "@uidotdev/usehooks": "^2.4.1",
+    "api": "^6.1.1",
     "aws-sdk": "^2.1502.0",
     "bcryptjs": "^2.4.3",
     "clsx": "^1.2.1",
     "cuid": "^3.0.0",
     "defer-if": "^1.0.5",
+    "fetch-retry": "^5.0.6",
     "framer-motion": "^10.16.5",
     "hamburger-react": "^2.5.0",
     "isbot": "^3.6.8",
     "nprogress": "^0.2.0",
+    "prisma": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-google-charts": "^4.0.1",
     "react-icons": "^4.12.0",
-    "prisma": "latest",
-
     "react-resize-detector": "^9.1.0",
     "react-use": "^17.4.0",
     "react-vertical-timeline-component": "^3.6.0",
@@ -62,8 +60,8 @@
     "three": "^0.158.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.3.0",
-    "@remix-run/eslint-config": "^2.3.0",
+    "@remix-run/dev": "latest",
+    "@remix-run/eslint-config": "latest",
     "@types/bcryptjs": "^2.4.6",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
@@ -74,7 +72,7 @@
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.1.6",
-    "vite": "^5.0.0",
+    "vite": "latest",
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {

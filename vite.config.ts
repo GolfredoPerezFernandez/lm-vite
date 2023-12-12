@@ -4,6 +4,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   assetsInclude: ['**/*.glb'],
-
+  build: {
+    commonjsOptions: { transformMixedEsModules: true } // Change
+  },
   plugins: [remix(), tsconfigPaths()],
 });
